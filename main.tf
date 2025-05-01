@@ -1,25 +1,26 @@
 # author- jaya chandra naveen
 # date_created -- 30-04-2025
-# script to run the app in browser.
+# Terraform script that provisions infrastructure on AWS to run a Flask-based Python app in a browser.
+
 
 provider "aws" {
-  region = "eu-north-1"
+  region = "eu-north-1"                # AWS Provider Configuration
 }
 
 variable "cidr" {
-  default = "10.0.0.0/16"
+  default = "10.0.0.0/16"              #  Variable Declaration
 }
 
 resource "aws_key_pair" "example" {
-  key_name   = "master"
+  key_name   = "master"                # SSH Key Pair-- lets you securely SSH into your EC2 instance.
   public_key = file("~/.ssh/id_rsa.pub")
 }
 
 resource "aws_vpc" "myvpc" {
-  cidr_block = var.cidr
+  cidr_block = var.cidr                # Virtual Private Cloud---Creates a VPC with the CIDR block 10.0.0.0/16. This is your private network in AWS.
 }
 
-resource "aws_subnet" "sub1" {
+resource "aws_subnet" "sub1" {          
   vpc_id                  = aws_vpc.myvpc.id
   cidr_block              = "10.0.0.0/24"
   availability_zone       = "eu-north-1a"
